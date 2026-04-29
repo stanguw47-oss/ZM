@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЖильёМоё — твой путь к квартире</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D0F1A;
+    --bg2: #131627;
+    --bg3: #1A1F35;
+    --card: #1E2440;
+    --card2: #252C4A;
+    --accent: #4F8EF7;
+    --accent2: #6C63FF;
+    --green: #2FD882;
+    --yellow: #FFD166;
+    --red: #FF6B6B;
+    --pink: #F76F8E;
+    --text: #E8ECF8;
+    --muted: #7A84A8;
+    --border: rgba(79,142,247,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Golos Text', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(13,15,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+  }
+  .logo {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900; font-size: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    cursor: pointer;
+  }
+  .nav-links { display:flex; gap:24px; align-items:center; }
+  .nav-links a {
+    color: var(--muted); text-decoration:none; font-size:14px;
+    transition: color .2s; cursor:pointer;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; border-radius: 10px; padding: 8px 20px;
+    color: #fff; font-family:'Golos Text',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition: opacity .2s;
+  }
+  .nav-btn:hover { opacity: 0.85; }
+
+  /* SCREENS */
+  .screen { display:none; padding-top: 60px; min-height: 100vh; }
+  .screen.active { display:block; }
+
+  /* ── HERO ── */
+  #screen-home {
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(79,142,247,0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(108,99,255,0.1), transparent),
+      var(--bg);
+  }
+  .hero {
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 60px;
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 32px 60px;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(79,142,247,0.15);
+    border: 1px solid rgba(79,142,247,0.3);
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 12px; color: var(--accent);
+    margin-bottom: 20px; font-weight:600; letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 900; line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--muted); font-size:17px; line-height:1.7; margin-bottom:32px; }
+  .hero-cta { display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border:none; border-radius:14px; padding:14px 32px;
+    color:#fff; font-family:'Golos Text',sans-serif; font-size:16px; font-weight:600;
+    cursor:pointer; transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 8px 30px rgba(79,142,247,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(79,142,247,0.4); }
+  .btn-ghost {
+    background: transparent; border: 1.5px solid var(--border);
+    border-radius:14px; padding:14px 32px;
+    color:var(--text); font-family:'Golos Text',sans-serif; font-size:16px; font-weight:600;
+    cursor:pointer; transition: border-color .2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); }
+
+  /* hero visual */
+  .hero-visual {
+    position: relative; display:flex; justify-content:center;
+  }
+  .hero-card-main {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px; padding: 28px;
+    width: 320px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    position: relative; z-index:2;
+  }
+  .hero-card-label {
+    font-size:11px; color: var(--muted); text-transform:uppercase; letter-spacing:.1em;
+    margin-bottom:8px;
+  }
+  .hero-card-title {
+    font-family:'Unbounded',sans-serif; font-size:15px; font-weight:700;
+    margin-bottom:16px;
+  }
+  .progress-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .progress-label { font-size:12px; color:var(--muted); width:110px; flex-shrink:0; }
+  .progress-bar { flex:1; height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:4px; }
+  .progress-fill.blue { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .progress-fill.green { background: linear-gradient(90deg, var(--green), #20b963); }
+  .progress-fill.yellow { background: linear-gradient(90deg, var(--yellow), #ffb800); }
+  .progress-val { font-size:12px; font-weight:600; width:36px; text-align:right; }
+  .hero-card-float {
+    position:absolute; background: var(--card2);
+    border: 1px solid var(--border); border-radius:16px; padding:14px 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .float-1 { top:-24px; right:-30px; }
+  .float-2 { bottom:-20px; left:-30px; }
+  .float-num {
+    font-family:'Unbounded',sans-serif; font-size:22px; font-weight:900;
+    color: var(--green);
+  }
+  .float-sub { font-size:11px; color:var(--muted); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display:grid; grid-template-columns: repeat(3,1fr);
+    gap:2px; max-width:1100px; margin:0 auto; padding:0 32px 60px;
+  }
+  .stat-item {
+    background: var(--bg2); padding:28px 24px;
+    text-align:center;
+  }
+  .stat-item:first-child { border-radius: 20px 0 0 20px; }
+  .stat-item:last-child { border-radius: 0 20px 20px 0; }
+  .stat-num {
+    font-family:'Unbounded',sans-serif; font-size:32px; font-weight:900;
+    color: var(--accent); display:block; margin-bottom:6px;
+  }
+  .stat-desc { font-size:13px; color:var(--muted); }
+
+  /* SECTION */
+  .section { max-width:1100px; margin:0 auto; padding:60px 32px; }
+  .section-title {
+    font-family:'Unbounded',sans-serif; font-size:clamp(22px,3vw,32px);
+    font-weight:800; margin-bottom:8px;
+  }
+  .section-sub { color:var(--muted); font-size:16px; margin-bottom:40px; }
+
+  /* FEATURES */
+  .features-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:20px; }
+  .feature-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius:20px; padding:28px;
+    transition: border-color .2s, transform .2s;
+    cursor:default;
+  }
+  .feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .feature-icon {
+    width:48px; height:48px; border-radius:14px; display:flex; align-items:center;
+    justify-content:center; font-size:22px; margin-bottom:16px;
+  }
+  .feature-card h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .feature-card p { font-size:14px; color:var(--muted); line-height:1.6; }
+
+  /* ── ONBOARDING ── */
+  #screen-onboarding {
+    background: var(--bg);
+    display:none; align-items:center; justify-content:center;
+    min-height:100vh; padding:80px 32px 40px;
+  }
+  #screen-onboarding.active { display:flex; }
+  .onboard-wrap { max-width:620px; width:100%; }
+  .step-indicator {
+    display:flex; gap:8px; margin-bottom:40px;
+  }
+  .step-dot {
+    height:4px; border-radius:2px; flex:1;
+    background: var(--bg3); transition: background .3s;
+  }
+  .step-dot.done { background: var(--green); }
+  .step-dot.active { background: var(--accent); }
+  .onboard-step { display:none; }
+  .onboard-step.active { display:block; }
+  .onboard-q {
+    font-family:'Unbounded',sans-serif; font-size:24px; font-weight:800;
+    margin-bottom:8px; line-height:1.3;
+  }
+  .onboard-hint { color:var(--muted); margin-bottom:28px; font-size:15px; }
+  .option-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
+  .option-btn {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius:14px; padding:16px 20px;
+    color:var(--text); font-family:'Golos Text',sans-serif; font-size:15px;
+    cursor:pointer; text-align:left; transition: border-color .2s, background .2s;
+    display:flex; align-items:center; gap:10px;
+  }
+  .option-btn .opt-icon { font-size:20px; }
+  .option-btn.selected { border-color: var(--accent); background: rgba(79,142,247,0.1); }
+  .option-btn:hover { border-color: var(--accent); }
+  .range-group { margin-bottom:28px; }
+  .range-label { display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; color:var(--muted); }
+  .range-val { color:var(--text); font-weight:700; font-size:18px; }
+  input[type=range] {
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:3px;
+    background: linear-gradient(90deg, var(--accent) var(--pct,50%), var(--bg3) var(--pct,50%));
+    outline:none; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background: var(--accent); box-shadow: 0 2px 8px rgba(79,142,247,0.5);
+  }
+  .onboard-nav { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+  .btn-back {
+    background:transparent; border:1.5px solid var(--border); border-radius:12px;
+    padding:12px 24px; color:var(--muted); font-family:'Golos Text',sans-serif;
+    font-size:15px; cursor:pointer; transition: border-color .2s;
+  }
+  .btn-back:hover { border-color: var(--muted); }
+
+  /* ── DASHBOARD ── */
+  #screen-dashboard {
+    background: var(--bg);
+  }
+  .dash-header {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 28px 32px 0; max-width:100%;
+  }
+  .dash-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+  .dash-greeting .label { font-size:13px; color:var(--muted); margin-bottom:4px; }
+  .dash-greeting h2 { font-family:'Unbounded',sans-serif; font-size:22px; font-weight:800; }
+  .xp-badge {
+    background: linear-gradient(135deg,rgba(255,209,102,0.15),rgba(255,209,102,0.05));
+    border: 1px solid rgba(255,209,102,0.3);
+    border-radius:12px; padding:10px 18px; text-align:center;
+  }
+  .xp-badge .xp-num { font-family:'Unbounded',sans-serif; font-size:20px; color:var(--yellow); font-weight:900; }
+  .xp-badge .xp-label { font-size:11px; color:var(--muted); }
+  .dash-tabs { display:flex; gap:4px; }
+  .dash-tab {
+    padding:10px 20px; border-radius:12px 12px 0 0;
+    font-size:14px; font-weight:600; cursor:pointer;
+    color:var(--muted); transition: all .2s;
+    border:none; background:transparent;
+    font-family:'Golos Text',sans-serif;
+  }
+  .dash-tab.active { background:var(--bg); color:var(--text); }
+  .dash-tab:hover:not(.active) { color:var(--text); }
+
+  .dash-body { padding:32px; max-width:1200px; margin:0 auto; }
+  .dash-panel { display:none; }
+  .dash-panel.active { display:block; }
+
+  /* overview grid */
+  .overview-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+  .ov-card {
+    background:var(--card); border:1px solid var(--border); border-radius:18px;
+    padding:20px 22px;
+  }
+  .ov-card .ov-icon { font-size:24px; margin-bottom:8px; }
+  .ov-card .ov-val { font-family:'Unbounded',sans-serif; font-size:22px; font-weight:800; margin-bottom:2px; }
+  .ov-card .ov-label { font-size:12px; color:var(--muted); }
+
+  /* path progress */
+  .path-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:28px; margin-bottom:24px;
+  }
+  .path-card h3 { font-weight:700; font-size:17px; margin-bottom:20px; }
+  .path-steps { display:flex; gap:0; position:relative; }
+  .path-step { flex:1; text-align:center; position:relative; }
+  .path-step::before {
+    content:''; position:absolute; top:18px; left:50%; right:-50%;
+    height:3px; background:var(--bg3); z-index:0;
+  }
+  .path-step:last-child::before { display:none; }
+  .path-step.done::before { background: var(--green); }
+  .path-step.active::before { background: linear-gradient(90deg, var(--green), var(--bg3)); }
+  .step-circle {
+    width:38px; height:38px; border-radius:50%; border:2px solid var(--bg3);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; margin:0 auto 8px;
+    position:relative; z-index:1; background:var(--bg3);
+    font-family:'Golos Text',sans-serif;
+    transition: all .3s;
+  }
+  .path-step.done .step-circle { border-color:var(--green); background:rgba(47,216,130,0.15); color:var(--green); }
+  .path-step.active .step-circle {
+    border-color:var(--accent); background:rgba(79,142,247,0.15); color:var(--accent);
+    box-shadow: 0 0 0 4px rgba(79,142,247,0.1);
+    animation: pulse-step 2s infinite;
+  }
+  @keyframes pulse-step {
+    0%,100% { box-shadow: 0 0 0 4px rgba(79,142,247,0.1); }
+    50% { box-shadow: 0 0 0 8px rgba(79,142,247,0.05); }
+  }
+  .step-name { font-size:12px; color:var(--muted); line-height:1.3; }
+  .path-step.done .step-name, .path-step.active .step-name { color:var(--text); }
+
+  /* two-col layout */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .programs-list { display:flex; flex-direction:column; gap:12px; }
+  .prog-item {
+    background:var(--card2); border:1px solid var(--border);
+    border-radius:16px; padding:18px 20px;
+    display:flex; align-items:center; gap:14px;
+    cursor:pointer; transition: border-color .2s, transform .2s;
+  }
+  .prog-item:hover { border-color:var(--accent); transform:translateX(4px); }
+  .prog-badge {
+    width:44px; height:44px; border-radius:12px; display:flex;
+    align-items:center; justify-content:center; font-size:20px; flex-shrink:0;
+  }
+  .prog-info { flex:1; }
+  .prog-name { font-weight:600; font-size:14px; margin-bottom:3px; }
+  .prog-desc { font-size:12px; color:var(--muted); }
+  .prog-arrow { color:var(--muted); font-size:16px; }
+  .prog-tag {
+    font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+    padding:3px 8px; border-radius:6px; align-self:flex-start;
+  }
+  .tag-green { background:rgba(47,216,130,.15); color:var(--green); }
+  .tag-blue { background:rgba(79,142,247,.15); color:var(--accent); }
+  .tag-yellow { background:rgba(255,209,102,.15); color:var(--yellow); }
+
+  /* calculator card */
+  .calc-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:28px;
+  }
+  .calc-card h3 { font-weight:700; font-size:17px; margin-bottom:20px; }
+  .calc-row { margin-bottom:16px; }
+  .calc-row label { font-size:13px; color:var(--muted); display:block; margin-bottom:6px; }
+  .calc-input {
+    width:100%; background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; padding:10px 14px; color:var(--text);
+    font-family:'Golos Text',sans-serif; font-size:15px; outline:none;
+    transition: border-color .2s;
+  }
+  .calc-input:focus { border-color:var(--accent); }
+  .calc-result {
+    background: var(--bg3); border-radius:14px; padding:18px;
+    margin-top:16px;
+  }
+  .calc-result-row { display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px; }
+  .calc-result-row:last-child { margin-bottom:0; font-weight:700; font-size:16px; }
+  .calc-result-row span:last-child { color:var(--green); }
+
+  /* ── PROGRAMS PANEL ── */
+  .programs-search {
+    display:flex; gap:12px; margin-bottom:24px;
+  }
+  .search-input {
+    flex:1; background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:12px 18px; color:var(--text);
+    font-family:'Golos Text',sans-serif; font-size:15px; outline:none;
+    transition: border-color .2s;
+  }
+  .search-input:focus { border-color:var(--accent); }
+  .filter-btn {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:12px 20px; color:var(--text);
+    font-family:'Golos Text',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition: border-color .2s;
+    white-space:nowrap;
+  }
+  .filter-btn.active { border-color:var(--accent); background:rgba(79,142,247,0.1); color:var(--accent); }
+  .programs-full-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .prog-full-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:24px;
+    cursor:pointer; transition: border-color .2s, transform .2s;
+  }
+  .prog-full-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .prog-full-card .prog-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; }
+  .prog-full-card .prog-icon { font-size:28px; }
+  .prog-full-card .prog-title { font-weight:700; font-size:16px; margin-bottom:4px; }
+  .prog-full-card .prog-subtitle { font-size:13px; color:var(--muted); }
+  .prog-params { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .prog-param { background:var(--bg3); border-radius:8px; padding:6px 12px; font-size:12px; }
+  .prog-param span { color:var(--muted); margin-right:4px; }
+  .prog-actions { display:flex; gap:10px; }
+  .btn-sm {
+    flex:1; border-radius:10px; padding:10px; font-family:'Golos Text',sans-serif;
+    font-size:13px; font-weight:600; cursor:pointer; transition: all .2s;
+    border:none;
+  }
+  .btn-sm-primary { background:rgba(79,142,247,0.15); color:var(--accent); }
+  .btn-sm-primary:hover { background:rgba(79,142,247,0.25); }
+  .btn-sm-ghost { background:var(--bg3); color:var(--muted); }
+  .btn-sm-ghost:hover { color:var(--text); }
+
+  /* ── GAME PANEL ── */
+  .game-header { margin-bottom:28px; }
+  .game-header h3 { font-family:'Unbounded',sans-serif; font-size:22px; font-weight:800; margin-bottom:8px; }
+  .game-header p { color:var(--muted); font-size:15px; }
+  .game-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+  .game-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:24px; text-align:center;
+    cursor:pointer; transition: all .2s; position:relative; overflow:hidden;
+  }
+  .game-card:hover { transform:translateY(-4px); border-color:var(--accent); }
+  .game-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  }
+  .game-card.c1::before { background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+  .game-card.c2::before { background:linear-gradient(90deg,var(--green),#20b963); }
+  .game-card.c3::before { background:linear-gradient(90deg,var(--yellow),#ff9800); }
+  .game-card.c4::before { background:linear-gradient(90deg,var(--pink),var(--red)); }
+  .game-card.c5::before { background:linear-gradient(90deg,#a78bfa,var(--accent2)); }
+  .game-card.c6::before { background:linear-gradient(90deg,var(--accent),var(--green)); }
+  .game-icon { font-size:40px; margin-bottom:12px; display:block; }
+  .game-name { font-weight:700; font-size:15px; margin-bottom:6px; }
+  .game-desc { font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+  .game-meta { display:flex; align-items:center; justify-content:center; gap:10px; }
+  .game-stars { color:var(--yellow); font-size:12px; }
+  .game-xp { font-size:11px; color:var(--green); font-weight:700; }
+  .locked { opacity:.5; }
+  .locked-badge {
+    position:absolute; top:12px; right:12px;
+    background:rgba(0,0,0,.5); border-radius:8px; padding:3px 8px;
+    font-size:10px; color:var(--muted);
+  }
+
+  /* active game modal */
+  .game-modal {
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(13,15,26,.95); backdrop-filter:blur(20px);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .game-modal.open { display:flex; }
+  .game-modal-inner {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:28px; padding:40px; max-width:560px; width:100%;
+    position:relative;
+  }
+  .modal-close {
+    position:absolute; top:16px; right:16px; width:36px; height:36px;
+    border-radius:50%; border:none; background:var(--bg3);
+    color:var(--muted); font-size:18px; cursor:pointer; line-height:36px;
+    text-align:center;
+  }
+  .modal-close:hover { color:var(--text); }
+  .game-q { font-family:'Unbounded',sans-serif; font-size:20px; font-weight:800; margin-bottom:8px; line-height:1.3; }
+  .game-scenario { font-size:15px; color:var(--muted); margin-bottom:28px; line-height:1.6; }
+  .game-answers { display:flex; flex-direction:column; gap:10px; }
+  .game-ans {
+    background:var(--bg3); border:1.5px solid var(--border);
+    border-radius:14px; padding:16px 20px;
+    font-family:'Golos Text',sans-serif; font-size:15px; color:var(--text);
+    cursor:pointer; text-align:left; transition: all .2s;
+  }
+  .game-ans:hover { border-color:var(--accent); background:rgba(79,142,247,.08); }
+  .game-ans.correct { border-color:var(--green); background:rgba(47,216,130,.1); }
+  .game-ans.wrong { border-color:var(--red); background:rgba(255,107,107,.1); }
+  .game-feedback {
+    margin-top:20px; padding:16px; border-radius:12px;
+    font-size:14px; line-height:1.6; display:none;
+  }
+  .game-feedback.show { display:block; }
+  .game-feedback.ok { background:rgba(47,216,130,.1); color:var(--green); }
+  .game-feedback.bad { background:rgba(255,107,107,.1); color:var(--red); }
+  .game-next-btn {
+    margin-top:16px; width:100%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    border:none; border-radius:12px; padding:14px;
+    color:#fff; font-family:'Golos Text',sans-serif; font-size:16px; font-weight:600;
+    cursor:pointer; display:none;
+  }
+  .game-next-btn.show { display:block; }
+
+  /* leaderboard */
+  .leaderboard { margin-top:0; }
+  .lb-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .lb-header h3 { font-weight:700; font-size:17px; }
+  .lb-row {
+    display:flex; align-items:center; gap:14px;
+    padding:12px 16px; border-radius:14px; margin-bottom:8px;
+    background:var(--card);
+    transition: background .2s;
+  }
+  .lb-row.me { background:rgba(79,142,247,.1); border:1px solid rgba(79,142,247,.2); }
+  .lb-rank { font-family:'Unbounded',sans-serif; font-size:14px; font-weight:800; width:28px; color:var(--muted); }
+  .lb-rank.gold { color:var(--yellow); }
+  .lb-rank.silver { color:#aaa; }
+  .lb-rank.bronze { color:#cd7f32; }
+  .lb-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .lb-name { flex:1; font-size:14px; font-weight:600; }
+  .lb-sub { font-size:12px; color:var(--muted); }
+  .lb-xp { font-family:'Unbounded',sans-serif; font-size:13px; color:var(--yellow); font-weight:700; }
+
+  /* ── PROFILE ── */
+  .profile-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:24px; padding:32px;
+    display:flex; align-items:center; gap:28px;
+    margin-bottom:24px;
+  }
+  .avatar-big {
+    width:80px; height:80px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; flex-shrink:0;
+  }
+  .profile-info h2 { font-family:'Unbounded',sans-serif; font-size:20px; font-weight:800; margin-bottom:4px; }
+  .profile-info p { color:var(--muted); font-size:14px; margin-bottom:12px; }
+  .profile-tags { display:flex; gap:8px; flex-wrap:wrap; }
+  .profile-tag {
+    background:var(--bg3); border-radius:8px; padding:4px 12px;
+    font-size:12px; color:var(--muted);
+  }
+  .profile-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+  .ps-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:18px; padding:20px; text-align:center;
+  }
+  .ps-card .ps-val { font-family:'Unbounded',sans-serif; font-size:24px; font-weight:900; margin-bottom:4px; }
+  .ps-card .ps-label { font-size:12px; color:var(--muted); }
+  .achievements-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .ach-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:20px; text-align:center;
+    transition: transform .2s;
+  }
+  .ach-card:hover { transform:translateY(-3px); }
+  .ach-card .ach-icon { font-size:32px; display:block; margin-bottom:8px; }
+  .ach-card .ach-name { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .ach-card .ach-desc { font-size:11px; color:var(--muted); }
+  .ach-card.locked { opacity:.4; filter:grayscale(1); }
+
+  /* NOTIFICATIONS */
+  .notif-list { display:flex; flex-direction:column; gap:10px; }
+  .notif-item {
+    display:flex; gap:14px; align-items:flex-start;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:16px 20px;
+  }
+  .notif-item.unread { border-color:rgba(79,142,247,.3); background:rgba(79,142,247,.05); }
+  .notif-icon { font-size:22px; flex-shrink:0; }
+  .notif-text strong { font-size:14px; font-weight:600; display:block; margin-bottom:2px; }
+  .notif-text span { font-size:13px; color:var(--muted); }
+  .notif-time { font-size:11px; color:var(--muted); margin-left:auto; white-space:nowrap; }
+  .notif-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); margin-top:6px; flex-shrink:0; }
+
+  /* Modal overlay for program detail */
+  .detail-modal {
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(13,15,26,.95); backdrop-filter:blur(20px);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .detail-modal.open { display:flex; }
+  .detail-inner {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:28px; padding:40px; max-width:640px; width:100%;
+    position:relative; max-height:85vh; overflow-y:auto;
+  }
+  .detail-inner h2 { font-family:'Unbounded',sans-serif; font-size:22px; font-weight:800; margin-bottom:6px; }
+  .detail-inner .detail-sub { color:var(--muted); font-size:14px; margin-bottom:24px; }
+  .detail-section { margin-bottom:20px; }
+  .detail-section h4 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:10px; }
+  .detail-params { display:flex; flex-direction:column; gap:8px; }
+  .detail-param-row { display:flex; justify-content:space-between; padding:10px 14px; background:var(--bg3); border-radius:10px; font-size:14px; }
+  .detail-param-row span:last-child { font-weight:600; color:var(--text); }
+  .detail-steps { counter-reset: steps; display:flex; flex-direction:column; gap:10px; }
+  .detail-step { display:flex; gap:12px; align-items:flex-start; }
+  .detail-step-num {
+    width:28px; height:28px; border-radius:50%;
+    background:rgba(79,142,247,.15); color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700; flex-shrink:0;
+    font-family:'Unbounded',sans-serif;
+  }
+  .detail-step-text { font-size:14px; color:var(--muted); padding-top:4px; line-height:1.5; }
+
+  /* toast */
+  .toast {
+    position:fixed; bottom:28px; right:28px; z-index:500;
+    background:var(--card2); border:1px solid var(--border);
+    border-radius:16px; padding:14px 20px;
+    font-size:14px; color:var(--text);
+    display:flex; align-items:center; gap:10px;
+    transform:translateY(80px); opacity:0; transition: all .4s;
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    max-width:340px;
+  }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast-icon { font-size:20px; }
+
+  @media(max-width:768px){
+    .hero { grid-template-columns:1fr; gap:40px; padding:40px 20px 40px; }
+    .hero-visual { display:none; }
+    .stats-bar { grid-template-columns:1fr; }
+    .features-grid { grid-template-columns:1fr; }
+    .overview-grid { grid-template-columns:repeat(2,1fr); }
+    .two-col { grid-template-columns:1fr; }
+    .game-grid { grid-template-columns:1fr 1fr; }
+    .programs-full-grid { grid-template-columns:1fr; }
+    .profile-stats { grid-template-columns:repeat(2,1fr); }
+    .achievements-grid { grid-template-columns:repeat(2,1fr); }
+    .path-steps { flex-direction:column; }
+    .path-step::before { display:none; }
+    nav { padding:0 16px; }
+    .nav-links { display:none; }
+    .dash-body { padding:16px; }
+    .dash-header { padding:20px 16px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="goHome()">ЖильёМоё</div>
+  <div class="nav-links">
+    <a onclick="showScreen('screen-home')">Главная</a>
+    <a onclick="showDash('programs')">Программы</a>
+    <a onclick="showDash('game')">Игры</a>
+    <a onclick="showDash('profile')">Профиль</a>
+  </div>
+  <button class="nav-btn" onclick="showScreen('screen-onboarding');startOnboard()">Начать бесплатно</button>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✅</span>
+  <span id="toast-text">Программа добавлена в избранное</span>
+</div>
+
+<!-- ════════════════════════════════ HOME ════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-badge">🏠 Платформа для молодёжи</div>
+      <h1>Своё жильё — <span>реально</span>. Мы покажем как.</h1>
+      <p>Находим подходящие льготные программы, обучаем финансовой грамотности в игровой форме и строим твой персональный путь к квартире.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="showScreen('screen-onboarding');startOnboard()">Найти мои программы →</button>
+        <button class="btn-ghost" onclick="showDash('game')">Попробовать игру</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-float float-1">
+        <div class="float-num">47</div>
+        <div class="float-sub">программ найдено</div>
+      </div>
+      <div class="hero-card-main">
+        <div class="hero-card-label">Твой прогресс</div>
+        <div class="hero-card-title">🎯 Молодая семья · Москва</div>
+        <div class="progress-row">
+          <div class="progress-label">Накопление</div>
+          <div class="progress-bar"><div class="progress-fill blue" style="width:65%"></div></div>
+          <div class="progress-val">65%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label">Кредитный рейтинг</div>
+          <div class="progress-bar"><div class="progress-fill green" style="width:82%"></div></div>
+          <div class="progress-val">82%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label">Документы</div>
+          <div class="progress-bar"><div class="progress-fill yellow" style="width:40%"></div></div>
+          <div class="progress-val">40%</div>
+        </div>
+        <div style="margin-top:16px; padding:12px; background:rgba(47,216,130,.1); border-radius:12px; font-size:13px; color:var(--green);">
+          ✅ Семейная ипотека — вы подходите!
+        </div>
+      </div>
+      <div class="hero-card-float float-2">
+        <div class="float-num" style="color:var(--yellow)">+350 XP</div>
+        <div class="float-sub">за финансовый тест</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">80%</span>
+      <span class="stat-desc">молодёжи не знают о льготных программах</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">47+</span>
+      <span class="stat-desc">программ в нашей базе: федеральные, региональные, отраслевые</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">3 мин</span>
+      <span class="stat-desc">достаточно для персонального подбора программ</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Как это работает</div>
+    <div class="section-sub">Три шага от незнания до своей квартиры</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(79,142,247,.15);">🎯</div>
+        <h3>Персональный подбор</h3>
+        <p>Расскажи о себе: возраст, доход, регион, семья. Платформа найдёт все подходящие программы и покажет реальные цифры — сколько сэкономишь и как быстро.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(47,216,130,.15);">🎮</div>
+        <h3>Учись играя</h3>
+        <p>«СитиПро» — игровой симулятор финансовых решений. Осваивай ипотечные механики, льготы и семейный бюджет без риска. Зарабатывай баллы и реальные бонусы.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,209,102,.15);">🗺️</div>
+        <h3>Карта пути</h3>
+        <p>Пошаговый план от сегодняшнего дня до подписания договора. Чеклист документов, напоминания о дедлайнах программ и поддержка на каждом этапе.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(247,111,142,.15);">🏦</div>
+        <h3>Интеграция с банками</h3>
+        <p>Прямые ссылки на одобренные банки и застройщиков, работающих по льготным программам. Предварительный расчёт без похода в банк.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(108,99,255,.15);">📱</div>
+        <h3>Уведомления</h3>
+        <p>Push, email, VK-бот — выбери как получать напоминания о новых программах, дедлайнах заявок и изменении ставок. Не пропусти выгодный момент.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(79,142,247,.15);">🏆</div>
+        <h3>Сертификаты и статусы</h3>
+        <p>Официальные сертификаты финансовой грамотности (в партнёрстве с Минфином), уникальные бейджи и доступ к закрытым мероприятиям.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA section -->
+  <div style="background:var(--bg2); border-top:1px solid var(--border); padding:60px 32px; text-align:center;">
+    <div style="max-width:600px; margin:0 auto;">
+      <div style="font-family:'Unbounded',sans-serif; font-size:28px; font-weight:800; margin-bottom:12px;">
+        Начни прямо сейчас
+      </div>
+      <p style="color:var(--muted); font-size:16px; margin-bottom:28px;">3 минуты — и ты узнаешь, какие программы тебе доступны и сколько можно сэкономить</p>
+      <button class="btn-primary" style="font-size:17px; padding:16px 40px;" onclick="showScreen('screen-onboarding');startOnboard()">
+        Пройти персональный подбор →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ ONBOARDING ════════════════════════════ -->
+<div class="screen" id="screen-onboarding">
+  <div class="onboard-wrap">
+    <div class="step-indicator">
+      <div class="step-dot" id="sd1"></div>
+      <div class="step-dot" id="sd2"></div>
+      <div class="step-dot" id="sd3"></div>
+      <div class="step-dot" id="sd4"></div>
+      <div class="step-dot" id="sd5"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="onboard-step" id="ob-step-1">
+      <div class="onboard-q">Кто ты?</div>
+      <div class="onboard-hint">Выбери описание, которое ближе всего подходит</div>
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectOpt(this)">
+          <span class="opt-icon">🎓</span> Студент / только начинаю работать
+        </button>
+        <button class="option-btn" onclick="selectOpt(this)">
+          <span class="opt-icon">💼</span> Работаю, снимаю жильё
+        </button>
+        <button class="option-btn" onclick="selectOpt(this)">
+          <span class="opt-icon">👨‍👩‍👧</span> Молодая семья, есть дети
+        </button>
+        <button class="option-btn" onclick="selectOpt(this)">
+          <span class="opt-icon">🔬</span> Молодой учёный / IT
+        </button>
+      </div>
+      <div class="onboard-nav">
+        <div></div>
+        <button class="btn-primary" onclick="nextStep(1)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="onboard-step" id="ob-step-2">
+      <div class="onboard-q">Сколько тебе лет?</div>
+      <div class="onboard-hint">Возраст влияет на доступность программ</div>
+      <div class="range-group">
+        <div class="range-label">
+          <span>18 лет</span>
+          <span class="range-val" id="age-val">26 лет</span>
+          <span>45 лет</span>
+        </div>
+        <input type="range" id="age-range" min="18" max="45" value="26" oninput="updateRange(this,'age-val',' лет')">
+      </div>
+      <div class="onboard-q" style="font-size:18px;margin-top:28px;">Твой регион?</div>
+      <div class="option-grid" style="margin-top:16px;">
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">🏙️</span> Москва / МО</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">🌊</span> Санкт-Петербург</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">🌲</span> Регион-миллионник</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">🌾</span> Малый город / село</button>
+      </div>
+      <div class="onboard-nav">
+        <button class="btn-back" onclick="prevStep(2)">← Назад</button>
+        <button class="btn-primary" onclick="nextStep(2)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="onboard-step" id="ob-step-3">
+      <div class="onboard-q">Доход в месяц?</div>
+      <div class="onboard-hint">Примерно — для расчёта доступных программ</div>
+      <div class="range-group">
+        <div class="range-label">
+          <span>30 тыс.</span>
+          <span class="range-val" id="income-val">90 тыс. ₽</span>
+          <span>400 тыс.</span>
+        </div>
+        <input type="range" id="income-range" min="30" max="400" value="90" oninput="updateRange(this,'income-val',' тыс. ₽')">
+      </div>
+      <div class="onboard-q" style="font-size:18px;margin-top:28px;">Семейное положение?</div>
+      <div class="option-grid" style="margin-top:16px;">
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">👤</span> Один / одна</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">💑</span> В браке, без детей</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">👶</span> Есть дети (1)</button>
+        <button class="option-btn" onclick="selectOpt(this)"><span class="opt-icon">👨‍👩‍👧‍👦</span> Есть дети (2+)</button>
+      </div>
+      <div class="onboard-nav">
+        <button class="btn-back" onclick="prevStep(3)">← Назад</button>
+        <button class="btn-primary" onclick="nextStep(3)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="onboard-step" id="ob-step-4">
+      <div class="onboard-q">Что для тебя важно?</div>
+      <div class="onboard-hint">Выбери до трёх приоритетов</div>
+      <div class="option-grid">
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">📉</span> Минимальный первый взнос</button>
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">📊</span> Низкая ставка ипотеки</button>
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">🏙️</span> Квартира в новостройке</button>
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">🌳</span> Дом / загородная недвижимость</button>
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">📍</span> Конкретный город</button>
+        <button class="option-btn" onclick="toggleOpt(this)"><span class="opt-icon">⚡</span> Максимальная скорость</button>
+      </div>
+      <div class="onboard-nav">
+        <button class="btn-back" onclick="prevStep(4)">← Назад</button>
+        <button class="btn-primary" onclick="nextStep(4)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 5 — результат -->
+    <div class="onboard-step" id="ob-step-5">
+      <div style="text-align:center; margin-bottom:32px;">
+        <div style="font-size:56px; margin-bottom:16px; animation:pop .4s;">🎉</div>
+        <div class="onboard-q" style="text-align:center;">Твои программы найдены!</div>
+        <div class="onboard-hint" style="text-align:center;">Мы подобрали <strong style="color:var(--green)">5 программ</strong>, которые тебе подходят</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:28px;">
+        <div class="prog-item" style="background:var(--card2);" onclick="showProgDetail('family')">
+          <div class="prog-badge" style="background:rgba(47,216,130,.15); font-size:22px;">🏠</div>
+          <div class="prog-info">
+            <div class="prog-name">Семейная ипотека</div>
+            <div class="prog-desc">Ставка 6% · до 12 млн ₽ · требуется ребёнок до 6 лет</div>
+          </div>
+          <div class="prog-tag tag-green">Подходит</div>
+        </div>
+        <div class="prog-item" style="background:var(--card2);" onclick="showProgDetail('young')">
+          <div class="prog-badge" style="background:rgba(79,142,247,.15); font-size:22px;">🎓</div>
+          <div class="prog-info">
+            <div class="prog-name">Программа «Молодая семья»</div>
+            <div class="prog-desc">Субсидия 30-35% стоимости жилья от государства</div>
+          </div>
+          <div class="prog-tag tag-blue">Проверить</div>
+        </div>
+        <div class="prog-item" style="background:var(--card2);" onclick="showProgDetail('it')">
+          <div class="prog-badge" style="background:rgba(255,209,102,.15); font-size:22px;">💻</div>
+          <div class="prog-info">
+            <div class="prog-name">IT-ипотека</div>
+            <div class="prog-desc">Ставка 5% · для работников аккредитованных IT-компаний</div>
+          </div>
+          <div class="prog-tag tag-yellow">Узнать</div>
+        </div>
+      </div>
+      <button class="btn-primary" style="width:100%; font-size:16px; padding:16px;" onclick="showScreen('screen-dashboard');initDash()">
+        Открыть личный кабинет →
+      </button>
+      <style>@keyframes pop{0%{transform:scale(.5)}70%{transform:scale(1.15)}100%{transform:scale(1)}}</style>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ DASHBOARD ════════════════════════════ -->
+<div class="screen" id="screen-dashboard">
+  <div class="dash-header">
+    <div class="dash-top">
+      <div class="dash-greeting">
+        <div class="label">Добро пожаловать 👋</div>
+        <h2>Александра, 26 лет · Москва</h2>
+      </div>
+      <div class="xp-badge">
+        <div class="xp-num">1 250 XP</div>
+        <div class="xp-label">Уровень 4 · «Финансист»</div>
+      </div>
+    </div>
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchTab('overview')">Обзор</button>
+      <button class="dash-tab" onclick="switchTab('programs')">Программы</button>
+      <button class="dash-tab" onclick="switchTab('game')">Игры</button>
+      <button class="dash-tab" onclick="switchTab('profile')">Профиль</button>
+      <button class="dash-tab" onclick="switchTab('notif')">Уведомления <span style="color:var(--accent)">●</span></button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- OVERVIEW -->
+    <div class="dash-panel active" id="panel-overview">
+      <div class="overview-grid">
+        <div class="ov-card">
+          <div class="ov-icon">🏠</div>
+          <div class="ov-val" style="color:var(--green)">5</div>
+          <div class="ov-label">подходящих программ</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-icon">💰</div>
+          <div class="ov-val" style="color:var(--yellow)">2.4 млн</div>
+          <div class="ov-label">максимальная субсидия</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-icon">📈</div>
+          <div class="ov-val" style="color:var(--accent)">5%</div>
+          <div class="ov-label">минимальная ставка</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-icon">🎮</div>
+          <div class="ov-val" style="color:var(--pink)">1 250</div>
+          <div class="ov-label">заработано XP</div>
+        </div>
+      </div>
+
+      <!-- path -->
+      <div class="path-card">
+        <h3>📍 Твой путь к квартире</h3>
+        <div class="path-steps">
+          <div class="path-step done">
+            <div class="step-circle">✓</div>
+            <div class="step-name">Профиль заполнен</div>
+          </div>
+          <div class="path-step done">
+            <div class="step-circle">✓</div>
+            <div class="step-name">Программы найдены</div>
+          </div>
+          <div class="path-step active">
+            <div class="step-circle">3</div>
+            <div class="step-name">Изучить программы</div>
+          </div>
+          <div class="path-step">
+            <div class="step-circle">4</div>
+            <div class="step-name">Собрать документы</div>
+          </div>
+          <div class="path-step">
+            <div class="step-circle">5</div>
+            <div class="step-name">Подать заявку</div>
+          </div>
+          <div class="path-step">
+            <div class="step-circle">🏠</div>
+            <div class="step-name">Своё жильё!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- programs list -->
+        <div class="path-card" style="padding:24px;">
+          <h3 style="margin-bottom:16px;">🎯 Топ программ для тебя</h3>
+          <div class="programs-list">
+            <div class="prog-item" onclick="showProgDetail('family')">
+              <div class="prog-badge" style="background:rgba(47,216,130,.15);">🏠</div>
+              <div class="prog-info">
+                <div class="prog-name">Семейная ипотека</div>
+                <div class="prog-desc">6% · до 12 млн ₽</div>
+              </div>
+              <div class="prog-tag tag-green">✓ Подходит</div>
+            </div>
+            <div class="prog-item" onclick="showProgDetail('young')">
+              <div class="prog-badge" style="background:rgba(79,142,247,.15);">🎓</div>
+              <div class="prog-info">
+                <div class="prog-name">Молодая семья</div>
+                <div class="prog-desc">Субсидия до 35%</div>
+              </div>
+              <div class="prog-tag tag-blue">Изучить</div>
+            </div>
+            <div class="prog-item" onclick="showProgDetail('it')">
+              <div class="prog-badge" style="background:rgba(255,209,102,.15);">💻</div>
+              <div class="prog-info">
+                <div class="prog-name">IT-ипотека</div>
+                <div class="prog-desc">5% · для IT-сферы</div>
+              </div>
+              <div class="prog-tag tag-yellow">Проверить</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- calculator -->
+        <div class="calc-card">
+          <h3>🧮 Быстрый расчёт</h3>
+          <div class="calc-row">
+            <label>Стоимость жилья, ₽</label>
+            <input class="calc-input" type="number" id="c-price" value="6500000" oninput="calcMortgage()">
+          </div>
+          <div class="calc-row">
+            <label>Первоначальный взнос, ₽</label>
+            <input class="calc-input" type="number" id="c-down" value="1300000" oninput="calcMortgage()">
+          </div>
+          <div class="calc-row">
+            <label>Ставка, %</label>
+            <input class="calc-input" type="number" id="c-rate" value="6" step="0.1" oninput="calcMortgage()">
+          </div>
+          <div class="calc-row">
+            <label>Срок, лет</label>
+            <input class="calc-input" type="number" id="c-term" value="20" oninput="calcMortgage()">
+          </div>
+          <div class="calc-result" id="calc-result">
+            <div class="calc-result-row"><span>Сумма кредита</span><span id="r-loan">5 200 000 ₽</span></div>
+            <div class="calc-result-row"><span>Ежемесячный платёж</span><span id="r-pay">37 264 ₽</span></div>
+            <div class="calc-result-row"><span>Переплата</span><span id="r-over" style="color:var(--red)">3 743 360 ₽</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAMS -->
+    <div class="dash-panel" id="panel-programs">
+      <div style="margin-bottom:24px;">
+        <div class="section-title" style="font-size:22px; margin-bottom:4px;">Каталог программ</div>
+        <div style="color:var(--muted); font-size:14px;">47 программ · федеральные, региональные, отраслевые</div>
+      </div>
+      <div class="programs-search">
+        <input class="search-input" placeholder="🔍 Поиск программ..." oninput="filterProgs(this.value)">
+        <button class="filter-btn active" onclick="filterCat('all',this)">Все</button>
+        <button class="filter-btn" onclick="filterCat('fed',this)">Федеральные</button>
+        <button class="filter-btn" onclick="filterCat('reg',this)">Региональные</button>
+        <button class="filter-btn" onclick="filterCat('sector',this)">Отраслевые</button>
+      </div>
+      <div class="programs-full-grid" id="prog-grid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- GAME -->
+    <div class="dash-panel" id="panel-game">
+      <div class="game-header">
+        <h3>СитиПро 🎮</h3>
+        <p>Финансовый симулятор. Учись принимать правильные решения в игровой форме и зарабатывай реальные бенефиты.</p>
+      </div>
+      <div class="game-grid">
+        <div class="game-card c2" onclick="startGame('mortgage')">
+          <span class="game-icon">🏰</span>
+          <div class="game-name">Замок ипотеки</div>
+          <div class="game-desc">Ипотечные механики, расчёт переплаты, выбор программы</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★★☆</div>
+            <div class="game-xp">+300 XP</div>
+          </div>
+        </div>
+        <div class="game-card c1" onclick="startGame('family')">
+          <span class="game-icon">👨‍👩‍👧</span>
+          <div class="game-name">Семейный симулятор</div>
+          <div class="game-desc">Планирование семейного бюджета и жилья</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★☆☆</div>
+            <div class="game-xp">+250 XP</div>
+          </div>
+        </div>
+        <div class="game-card c3" onclick="startGame('taxes')">
+          <span class="game-icon">🏝️</span>
+          <div class="game-name">Остров налогов</div>
+          <div class="game-desc">Налоговые вычеты и льготы при покупке жилья</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★★★</div>
+            <div class="game-xp">+200 XP</div>
+          </div>
+        </div>
+        <div class="game-card c4" onclick="startGame('crisis')">
+          <span class="game-icon">⚡</span>
+          <div class="game-name">Финансовая ЧС</div>
+          <div class="game-desc">Антикризисное мышление — что делать если...</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★☆☆</div>
+            <div class="game-xp">+180 XP</div>
+          </div>
+        </div>
+        <div class="game-card c5 locked" onclick="showToast('🔒 Разблокируй после 1500 XP','ℹ️')">
+          <div class="locked-badge">🔒</div>
+          <span class="game-icon">💹</span>
+          <div class="game-name">Подземелье инвестиций</div>
+          <div class="game-desc">Фондовый рынок и накопительные инструменты</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★★☆</div>
+            <div class="game-xp">+400 XP</div>
+          </div>
+        </div>
+        <div class="game-card c6" onclick="startGame('programs')">
+          <span class="game-icon">📋</span>
+          <div class="game-name">Программы поддержки</div>
+          <div class="game-desc">Квиз по государственным программам для молодых семей</div>
+          <div class="game-meta">
+            <div class="game-stars">★★★★☆</div>
+            <div class="game-xp">+150 XP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- leaderboard -->
+      <div class="leaderboard">
+        <div class="lb-header">
+          <h3>🏆 Лидерборд недели</h3>
+          <div style="font-size:13px; color:var(--muted);">Топ игроков · Москва</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank gold">1</div>
+          <div class="lb-avatar" style="background:rgba(255,209,102,.15);">🦁</div>
+          <div><div class="lb-name">Михаил К.</div><div class="lb-sub">Уровень 8 · Эксперт</div></div>
+          <div class="lb-xp">4 200 XP</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank silver">2</div>
+          <div class="lb-avatar" style="background:rgba(108,99,255,.15);">🦊</div>
+          <div><div class="lb-name">Дарья Н.</div><div class="lb-sub">Уровень 7 · Продвинутый</div></div>
+          <div class="lb-xp">3 650 XP</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank bronze">3</div>
+          <div class="lb-avatar" style="background:rgba(47,216,130,.15);">🐻</div>
+          <div><div class="lb-name">Артём В.</div><div class="lb-sub">Уровень 6 · Продвинутый</div></div>
+          <div class="lb-xp">2 980 XP</div>
+        </div>
+        <div class="lb-row me">
+          <div class="lb-rank" style="color:var(--accent)">14</div>
+          <div class="lb-avatar" style="background:rgba(79,142,247,.15);">🦋</div>
+          <div><div class="lb-name">Александра (ты)</div><div class="lb-sub">Уровень 4 · Финансист</div></div>
+          <div class="lb-xp" style="color:var(--accent)">1 250 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="dash-panel" id="panel-profile">
+      <div class="profile-header">
+        <div class="avatar-big">🦋</div>
+        <div class="profile-info">
+          <h2>Александра Богданова</h2>
+          <p>Уровень 4 · «Финансист» · Москва, 26 лет</p>
+          <div class="profile-tags">
+            <div class="profile-tag">👨‍👩‍👧 Молодая семья</div>
+            <div class="profile-tag">💼 Работающая</div>
+            <div class="profile-tag">🏠 Ищет жильё</div>
+            <div class="profile-tag">IT-специалист</div>
+          </div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="ps-card">
+          <div class="ps-val" style="color:var(--yellow)">1 250</div>
+          <div class="ps-label">XP заработано</div>
+        </div>
+        <div class="ps-card">
+          <div class="ps-val" style="color:var(--green)">5</div>
+          <div class="ps-label">подходящих программ</div>
+        </div>
+        <div class="ps-card">
+          <div class="ps-val" style="color:var(--accent)">4</div>
+          <div class="ps-label">игры пройдено</div>
+        </div>
+        <div class="ps-card">
+          <div class="ps-val" style="color:var(--pink)">7</div>
+          <div class="ps-label">дней на платформе</div>
+        </div>
+      </div>
+      <div class="section-title" style="font-size:18px; margin-bottom:16px;">🏅 Достижения</div>
+      <div class="achievements-grid">
+        <div class="ach-card">
+          <span class="ach-icon">🎯</span>
+          <div class="ach-name">Первый шаг</div>
+          <div class="ach-desc">Профиль заполнен</div>
+        </div>
+        <div class="ach-card">
+          <span class="ach-icon">🗺️</span>
+          <div class="ach-name">Путешественник</div>
+          <div class="ach-desc">5 программ изучено</div>
+        </div>
+        <div class="ach-card">
+          <span class="ach-icon">🧮</span>
+          <div class="ach-name">Математик</div>
+          <div class="ach-desc">Калькулятор использован</div>
+        </div>
+        <div class="ach-card">
+          <span class="ach-icon">🎮</span>
+          <div class="ach-name">Игрок</div>
+          <div class="ach-desc">Первая игра пройдена</div>
+        </div>
+        <div class="ach-card locked">
+          <span class="ach-icon">🏆</span>
+          <div class="ach-name">Чемпион</div>
+          <div class="ach-desc">Войди в топ-10</div>
+        </div>
+        <div class="ach-card locked">
+          <span class="ach-icon">📜</span>
+          <div class="ach-name">Сертификат</div>
+          <div class="ach-desc">Пройди все тесты</div>
+        </div>
+        <div class="ach-card locked">
+          <span class="ach-icon">🏠</span>
+          <div class="ach-name">Владелец</div>
+          <div class="ach-desc">Подай заявку на ипотеку</div>
+        </div>
+        <div class="ach-card locked">
+          <span class="ach-icon">🌟</span>
+          <div class="ach-name">Эксперт</div>
+          <div class="ach-desc">Уровень 8+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="dash-panel" id="panel-notif">
+      <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="section-title" style="font-size:22px;">Уведомления</div>
+        <button style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;">Прочитать все</button>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item unread">
+          <div class="notif-icon">🔥</div>
+          <div class="notif-text">
+            <strong>IT-ипотека: дедлайн через 14 дней</strong>
+            <span>Льготная ставка 5% действует до 1 июля 2025. Успей подать заявку!</span>
+          </div>
+          <div class="notif-dot"></div>
+          <div class="notif-time">2 ч. назад</div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon">🎮</div>
+          <div class="notif-text">
+            <strong>Новая игра доступна: «Замок ипотеки»</strong>
+            <span>Пройди квиз и узнай, как сэкономить на переплате. +300 XP ждут тебя!</span>
+          </div>
+          <div class="notif-dot"></div>
+          <div class="notif-time">5 ч. назад</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon">🏠</div>
+          <div class="notif-text">
+            <strong>Новая региональная программа в Москве</strong>
+            <span>Московская программа «Молодёжь столицы» — субсидия до 900 тыс. ₽ для семей.</span>
+          </div>
+          <div class="notif-time">Вчера</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon">📊</div>
+          <div class="notif-text">
+            <strong>Ставки снизились!</strong>
+            <span>ЦБ снизил ключевую ставку. Семейная ипотека теперь от 5.8%. Пересчитай свой план.</span>
+          </div>
+          <div class="notif-time">2 дня назад</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon">🏅</div>
+          <div class="notif-text">
+            <strong>Достижение разблокировано: «Математик»</strong>
+            <span>Ты воспользовался ипотечным калькулятором. +50 XP начислено!</span>
+          </div>
+          <div class="notif-time">3 дня назад</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ GAME MODAL ════════════ -->
+<div class="game-modal" id="game-modal">
+  <div class="game-modal-inner">
+    <button class="modal-close" onclick="closeGame()">✕</button>
+    <div id="game-content"></div>
+  </div>
+</div>
+
+<!-- ════════════ PROGRAM DETAIL MODAL ════════════ -->
+<div class="detail-modal" id="detail-modal">
+  <div class="detail-inner">
+    <button class="modal-close" onclick="closeDetail()">✕</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<script>
+/* ── NAVIGATION ── */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){ showScreen('screen-home'); }
+function showDash(tab){
+  showScreen('screen-dashboard');
+  switchTab(tab);
+}
+function initDash(){ showScreen('screen-dashboard'); switchTab('overview'); }
+function switchTab(tab){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
+  const tabs = ['overview','programs','game','profile','notif'];
+  const idx = tabs.indexOf(tab);
+  document.querySelectorAll('.dash-tab')[idx]?.classList.add('active');
+  document.getElementById('panel-'+tab)?.classList.add('active');
+  if(tab==='programs') renderPrograms('all');
+  if(tab==='overview') calcMortgage();
+}
+
+/* ── ONBOARDING ── */
+let currentStep=1;
+function startOnboard(){ currentStep=1; showOBStep(1); }
+function showOBStep(n){
+  document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('ob-step-'+n)?.classList.add('active');
+  for(let i=1;i<=5;i++){
+    const d=document.getElementById('sd'+i);
+    if(!d)continue;
+    d.classList.remove('active','done');
+    if(i<n) d.classList.add('done');
+    else if(i===n) d.classList.add('active');
+  }
+}
+function nextStep(from){ currentStep=from+1; showOBStep(currentStep); }
+function prevStep(from){ currentStep=from-1; showOBStep(currentStep); }
+function selectOpt(el){
+  const parent=el.closest('.option-grid');
+  parent.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleOpt(el){ el.classList.toggle('selected'); }
+function updateRange(el,valId,suffix){
+  document.getElementById(valId).textContent=el.value+suffix;
+  const pct=((el.value-el.min)/(el.max-el.min)*100)+'%';
+  el.style.setProperty('--pct',pct);
+}
+
+/* ── CALCULATOR ── */
+function calcMortgage(){
+  const price=parseFloat(document.getElementById('c-price').value)||0;
+  const down=parseFloat(document.getElementById('c-down').value)||0;
+  const rate=parseFloat(document.getElementById('c-rate').value)||1;
+  const term=parseFloat(document.getElementById('c-term').value)||1;
+  const loan=price-down;
+  const r=rate/100/12;
+  const n=term*12;
+  const pay=r>0?loan*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1):loan/n;
+  const total=pay*n;
+  const over=total-loan;
+  document.getElementById('r-loan').textContent=fmt(loan);
+  document.getElementById('r-pay').textContent=fmt(pay)+' ₽/мес';
+  document.getElementById('r-over').textContent=fmt(over);
+}
+function fmt(n){ return Math.round(n).toLocaleString('ru-RU')+' ₽'; }
+
+/* ── PROGRAMS DATA ── */
+const PROGRAMS=[
+  {id:'family',cat:'fed',icon:'🏠',title:'Семейная ипотека',sub:'Федеральная программа',
+   rate:'6%',amount:'до 12 млн ₽',dp:'от 20%',tag:'green',tagText:'Подходит',
+   desc:'Льготная ипотека для семей с детьми, рождёнными после 1 января 2018 года.',
+   params:[['Ставка','6%'],['Макс. сумма','12 млн ₽ (Москва / СПб)'],['Первый взнос','от 20%'],['Срок','до 30 лет'],['Кто может','Семья с ребёнком до 6 лет']],
+   steps:['Подтверди рождение ребёнка (свидетельство)','Соберите справки о доходах (2-НДФЛ)','Обратись в банк-партнёр программы','Получи одобрение и выбери квартиру','Подпиши договор и зарегистрируй сделку']},
+  {id:'young',cat:'fed',icon:'🎓',title:'Молодая семья',sub:'Федеральная программа',
+   rate:'субсидия',amount:'до 35% стоимости',dp:'—',tag:'blue',tagText:'Изучить',
+   desc:'Государственная субсидия на покупку жилья для молодых семей, нуждающихся в улучшении жилищных условий.',
+   params:[['Субсидия','30–35% стоимости жилья'],['Возраст','до 35 лет включительно'],['Условие','Очередь нуждающихся'],['Срок ожидания','2–5 лет (регион)'],['Добавляется','ещё 5% за каждого ребёнка']],
+   steps:['Встань на учёт нуждающихся в Администрации района','Дождись своей очереди','Получи свидетельство на субсидию','Выбери квартиру и подай документы в банк','Сделка при поддержке государства']},
+  {id:'it',cat:'sector',icon:'💻',title:'IT-ипотека',sub:'Отраслевая программа',
+   rate:'5%',amount:'до 18 млн ₽',dp:'от 20%',tag:'yellow',tagText:'Узнать',
+   desc:'Льготная ипотека для сотрудников аккредитованных IT-компаний в возрасте до 50 лет.',
+   params:[['Ставка','5%'],['Сумма','до 9 млн ₽ / до 18 млн ₽ (Москва)'],['Первый взнос','от 20%'],['Возраст','18–50 лет'],['Зарплата','от 150 тыс. ₽ gross (Москва)']],
+   steps:['Убедись, что компания аккредитована в Минцифры','Подтверди доход справкой 2-НДФЛ','Обратись в уполномоченный банк','Выбери новостройку или вторичку','Оформи сделку по льготной ставке']},
+  {id:'rural',cat:'reg',icon:'🌾',title:'Сельская ипотека',sub:'Федеральная программа',
+   rate:'3%',amount:'до 6 млн ₽',dp:'от 10%',tag:'green',tagText:'Подходит',
+   desc:'Ипотека по ставке до 3% для покупки или строительства жилья в сельской местности.',
+   params:[['Ставка','до 3%'],['Сумма','до 6 млн ₽'],['Первый взнос','от 10%'],['Объект','Сельский населённый пункт'],['Тип','Готовое жильё или строительство']],
+   steps:['Выбери объект в сельской местности','Убедись что в базе Минсельхоза','Соберите стандартный пакет документов','Обратись в Россельхозбанк или Сбер','Оформи сделку']},
+  {id:'msk_youth',cat:'reg',icon:'🏙️',title:'Молодёжь столицы',sub:'Региональная (Москва)',
+   rate:'субсидия',amount:'до 900 тыс. ₽',dp:'—',tag:'blue',tagText:'Изучить',
+   desc:'Субсидия от города Москвы для молодых семей при рождении или усыновлении ребёнка.',
+   params:[['Субсидия','900 тыс. ₽ (1 ребёнок)'],['Участники','Молодые семьи г. Москвы'],['Условие','Встать в очередь до 36 лет'],['Оформление','МФЦ или mos.ru'],['Срок','~3–7 лет']],
+   steps:['Зарегистрируйся на mos.ru','Подай заявку в Городскую программу','Подтверди нуждаемость в жилье','Получи свидетельство о субсидии','Используй при сделке']},
+  {id:'gpb',cat:'fed',icon:'🏗️',title:'Льготная ипотека 8%',sub:'Федеральная программа',
+   rate:'8%',amount:'до 12 млн ₽',dp:'от 20%',tag:'green',tagText:'Доступна',
+   desc:'Льготная ипотека на новостройки по сниженной ставке 8% для всех граждан России.',
+   params:[['Ставка','8%'],['Сумма','до 6 млн ₽ (регионы) / 12 млн (Москва/СПб)'],['Первый взнос','от 20%'],['Объект','Только новостройки'],['Срок','до 30 лет']],
+   steps:['Выбери новостройку у аккредитованного застройщика','Подготовь документы (паспорт, доход)','Обратись в любой уполномоченный банк','Получи решение банка','Оформи договор долевого участия']},
+];
+
+let currentCat='all';
+function renderPrograms(cat){
+  currentCat=cat;
+  const grid=document.getElementById('prog-grid');
+  if(!grid)return;
+  const filtered=cat==='all'?PROGRAMS:PROGRAMS.filter(p=>p.cat===cat);
+  grid.innerHTML=filtered.map(p=>`
+    <div class="prog-full-card" onclick="showProgDetail('${p.id}')">
+      <div class="prog-head">
+        <div class="prog-icon">${p.icon}</div>
+        <div>
+          <div class="prog-title">${p.title}</div>
+          <div class="prog-subtitle">${p.sub}</div>
+        </div>
+      </div>
+      <div class="prog-params">
+        <div class="prog-param"><span>Ставка:</span>${p.rate}</div>
+        <div class="prog-param"><span>Сумма:</span>${p.amount}</div>
+        <div class="prog-param"><span>Взнос:</span>${p.dp}</div>
+      </div>
+      <div class="prog-actions">
+        <button class="btn-sm btn-sm-primary" onclick="event.stopPropagation();showProgDetail('${p.id}')">Подробнее</button>
+        <button class="btn-sm btn-sm-ghost" onclick="event.stopPropagation();showToast('Добавлено в избранное','⭐')">В избранное</button>
+      </div>
+    </div>
+  `).join('');
+}
+function filterCat(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPrograms(cat);
+}
+function filterProgs(q){
+  const grid=document.getElementById('prog-grid');
+  if(!grid)return;
+  const filtered=PROGRAMS.filter(p=>p.title.toLowerCase().includes(q.toLowerCase())||p.desc.toLowerCase().includes(q.toLowerCase()));
+  grid.innerHTML=filtered.map(p=>`
+    <div class="prog-full-card" onclick="showProgDetail('${p.id}')">
+      <div class="prog-head">
+        <div class="prog-icon">${p.icon}</div>
+        <div><div class="prog-title">${p.title}</div><div class="prog-subtitle">${p.sub}</div></div>
+      </div>
+      <div class="prog-params">
+        <div class="prog-param"><span>Ставка:</span>${p.rate}</div>
+        <div class="prog-param"><span>Сумма:</span>${p.amount}</div>
+      </div>
+      <div class="prog-actions">
+        <button class="btn-sm btn-sm-primary" onclick="event.stopPropagation();showProgDetail('${p.id}')">Подробнее</button>
+        <button class="btn-sm btn-sm-ghost" onclick="event.stopPropagation();showToast('Добавлено в избранное','⭐')">В избранное</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── PROGRAM DETAIL ── */
+function showProgDetail(id){
+  const p=PROGRAMS.find(x=>x.id===id);
+  if(!p)return;
+  const paramsHtml=p.params.map(r=>`<div class="detail-param-row"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  const stepsHtml=p.steps.map((s,i)=>`<div class="detail-step"><div class="detail-step-num">${i+1}</div><div class="detail-step-text">${s}</div></div>`).join('');
+  document.getElementById('detail-content').innerHTML=`
+    <div style="font-size:40px;margin-bottom:12px;">${p.icon}</div>
+    <h2>${p.title}</h2>
+    <div class="detail-sub">${p.desc}</div>
+    <div class="detail-section">
+      <h4>Параметры программы</h4>
+      <div class="detail-params">${paramsHtml}</div>
+    </div>
+    <div class="detail-section">
+      <h4>Как воспользоваться</h4>
+      <div class="detail-steps">${stepsHtml}</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:24px;">
+      <button class="btn-primary" style="flex:1;padding:12px;" onclick="showToast('Открыта заявка на банк-партнёр 🏦','✅')">Подать заявку</button>
+      <button class="btn-ghost" style="flex:1;padding:12px;" onclick="showToast('Добавлено в избранное','⭐')">В избранное</button>
+    </div>
+  `;
+  document.getElementById('detail-modal').classList.add('open');
+}
+function closeDetail(){ document.getElementById('detail-modal').classList.remove('open'); }
+
+/* ── GAMES ── */
+const GAMES={
+  mortgage:{
+    q:'Семья берёт ипотеку 5 млн ₽ на 20 лет по ставке 10% и по семейной ипотеке 6%. Насколько меньше переплата при льготной ставке?',
+    scenario:'Расчёт ипотечной переплаты — базовый навык финансового планирования.',
+    answers:['~1.8 млн ₽','~3.2 млн ₽','~5.1 млн ₽','~800 тыс. ₽'],
+    correct:1,
+    feedback:'Правильно! При ставке 10% переплата ~6.7 млн, при 6% ~3.5 млн. Разница — около 3.2 млн ₽. Семейная ипотека реально меняет картину!'
+  },
+  family:{
+    q:'Молодая семья зарабатывает 120 тыс. ₽ в месяц совокупно. Сколько % дохода эксперты рекомендуют тратить на ипотечный платёж?',
+    scenario:'Вы с партнёром обсуждаете, потяните ли вы ипотеку.',
+    answers:['10–15%','25–30%','50%','Не важно, главное взять'],
+    correct:1,
+    feedback:'Правильно! Финансовые консультанты рекомендуют не более 25–30% дохода на обслуживание долгов. При доходе 120 тыс. — это 30–36 тыс./мес.'
+  },
+  taxes:{
+    q:'Вы купили квартиру за 3 млн ₽. Максимальный налоговый вычет, который можно получить — это?',
+    scenario:'Вы оформляете право собственности и думаете о налоговом возврате.',
+    answers:['260 000 ₽','390 000 ₽','1 300 000 ₽','520 000 ₽'],
+    correct:0,
+    feedback:'Правильно! Максимальный имущественный вычет — 2 млн ₽ × 13% = 260 000 ₽. Плюс можно вернуть до 390 000 ₽ с процентов по ипотеке.'
+  },
+  crisis:{
+    q:'Вы потеряли работу и не можете платить ипотеку. Что делать в первую очередь?',
+    scenario:'Кризисная ситуация. Звонит банк, на следующей неделе платёж.',
+    answers:['Ждать и надеяться','Позвонить в банк и попросить ипотечные каникулы','Продать квартиру срочно','Взять микрозайм чтобы погасить платёж'],
+    correct:1,
+    feedback:'Правильно! Ипотечные каникулы — законное право заёмщика. Банк обязан предоставить отсрочку до 6 месяцев при потере работы. Действуй быстро — не жди!'
+  },
+  programs:{
+    q:'Для участия в программе «Семейная ипотека» обязательным условием является:',
+    scenario:'Менеджер банка задаёт проверочный вопрос.',
+    answers:['Военная ипотека','Наличие ребёнка, рождённого после 01.01.2018','Доход выше 300 тыс. ₽','Только первая квартира'],
+    correct:1,
+    feedback:'Правильно! Ключевое условие — ребёнок, рождённый после 1 января 2018 года (или ребёнок с инвалидностью). Доход и количество квартир — не ограничивающие факторы.'
+  }
+};
+let gameAnswered=false;
+function startGame(type){
+  const g=GAMES[type];
+  if(!g)return;
+  gameAnswered=false;
+  document.getElementById('game-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);">СитиПро</div>
+    </div>
+    <div class="game-q">${g.q}</div>
+    <div class="game-scenario">${g.scenario}</div>
+    <div class="game-answers" id="game-answers">
+      ${g.answers.map((a,i)=>`<button class="game-ans" onclick="answerGame(${i},${g.correct},this,'${type}')">${a}</button>`).join('')}
+    </div>
+    <div class="game-feedback" id="game-fb"></div>
+    <button class="game-next-btn" id="game-next" onclick="closeGame();showToast('🎉 +200 XP начислено!','🏆')">Получить награду</button>
+  `;
+  document.getElementById('game-modal').classList.add('open');
+}
+function answerGame(chosen,correct,el,type){
+  if(gameAnswered)return;
+  gameAnswered=true;
+  const btns=document.querySelectorAll('.game-ans');
+  btns.forEach((b,i)=>{
+    if(i===correct) b.classList.add('correct');
+    else if(i===chosen && chosen!==correct) b.classList.add('wrong');
+  });
+  const fb=document.getElementById('game-fb');
+  const next=document.getElementById('game-next');
+  if(chosen===correct){
+    fb.className='game-feedback ok show';
+    fb.textContent='✅ '+GAMES[type].feedback;
+  } else {
+    fb.className='game-feedback bad show';
+    fb.textContent='❌ Неверно. '+GAMES[type].feedback;
+  }
+  next.classList.add('show');
+}
+function closeGame(){ document.getElementById('game-modal').classList.remove('open'); }
+
+/* ── TOAST ── */
+function showToast(msg,icon='✅'){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-text').textContent=msg;
+  document.getElementById('toast-icon').textContent=icon;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* init */
+calcMortgage();
+document.getElementById('age-range').dispatchEvent(new Event('input'));
+document.getElementById('income-range').dispatchEvent(new Event('input'));
+</script>
+</body>
+</html>
